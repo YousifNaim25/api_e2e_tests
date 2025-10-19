@@ -11,44 +11,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. نسحب الكود
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # 2. إعداد بايثون
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.13
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
 
-    # 3. تثبيت المكتبات
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    # 4. تشغيل الاختبارات وتوليد تقرير HTML
-    - name: Run tests
-      id: pytest
-      run: |
-        pytest -v --html=report.html --self-contained-html
+      - name: Run tests
+        run: |
+          pytest -v --html=report.html --self-contained-html
 
-    # 5. رفع التقرير كـ artifact
-    - name: Upload HTML Report
-      uses: actions/upload-artifact@v3
-      with:
-        name: html-report
-        path: report.html
-
-    # 6. إنشاء Issue تلقائي عند الفشل
-    - name: Create GitHub Issue if tests fail
-      if: failure()
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          github.issues.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            title: `API Tests Failed on commit ${context.sha}`,
-            body: `الاختبارات فشلت، تقدر تشوف التقرير هنا: [HTML Report](artifact-link)`
-          })
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: API-Test-Report
+          path: report.html
