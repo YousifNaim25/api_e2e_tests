@@ -1,5 +1,6 @@
 import requests
 import pytest
+# trigger GitHub Actions
 
 BASE_URL = "https://jsonplaceholder.typicode.com"
 
