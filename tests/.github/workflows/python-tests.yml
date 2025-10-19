@@ -1,4 +1,4 @@
-name: API Tests
+name: Python Tests
 
 on:
   push:
@@ -9,15 +9,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.13'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
@@ -26,10 +24,4 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest -v --html=report.html --self-contained-html
-
-      - name: Upload HTML report
-        uses: actions/upload-artifact@v3
-        with:
-          name: API-Test-Report
-          path: report.html
+          pytest --maxfail=1 --disable-warnings -q
